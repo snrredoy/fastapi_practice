@@ -70,3 +70,28 @@ async def read_item(item_id: str, q: str | None = None):
 
 
 # use query parameter type conversion
+@app.get('/num/{num_id}')
+async def number(num_id: str, q : str | None = None, short: bool = False):
+    num = {'num': num_id}
+    if q:
+        num.update({'q': q})
+    if not short:
+        num.update({
+            'description': 'This is an amazing item that has a long description.'
+        })
+
+    return num
+
+
+# Multiple path and query parameters
+@app.get('/user/{user_id}/num/{num_id}')
+async def number(num_id: str, user_id: str, q : str | None = None, short: bool = False):
+    num = {'user': user_id, 'num': num_id}
+    if q:
+        num.update({'q': q})
+    if not short:
+        num.update({
+            'description': 'This is an amazing item that has a long description.'
+        })
+
+    return num
