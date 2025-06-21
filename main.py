@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from enum import Enum
+from pydantic import BaseModel
 
 class Role(str, Enum):
     admin = 'admin'
@@ -95,3 +96,28 @@ async def number(num_id: str, user_id: str, q : str | None = None, short: bool =
         })
 
     return num
+
+# Item create api.
+class Item(BaseModel):
+    name: str 
+    description: str | None = None
+    price: float
+
+@app.post('/createItem/')
+async def createItem(item: Item):
+    return item
+
+
+#  Item update with request body + path parameter
+@app.put("/createItem/{item_id}")
+async def update_item(item_id: int, item: Item):
+    return {"item_id": item_id, **item.dict()}
+
+
+# Request body + path + query parameters
+@app.put("/createItems/{item_id}")
+async def update_item(item_id: int, item: Item, q: str | None = None):
+    result = {"item_id": item_id, **item.dict()}
+    if q:
+        result.update({"q": q})
+    return result
